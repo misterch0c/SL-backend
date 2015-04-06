@@ -1,2 +1,3 @@
-# SL-backend
-SL-backend
+# sl-backend
+
+a [Sails](http://sailsjs.org) application
