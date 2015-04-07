@@ -14,6 +14,7 @@ module.exports = {
   	description:'string',
   	rank:'string',
   	lang:'string',
+  	type: 'string'
   }
 };
 
