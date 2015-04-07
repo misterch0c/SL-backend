@@ -13,7 +13,7 @@ module.exports = {
     	//	lang:params.lang,rank})
 		console.log(params.link);
 		var rank=getAlexaRank(params.link); //undefined
-		console.log('rank = ',rank);
+		console.log('ransqsqsk = '+rank);
 
     },
 
