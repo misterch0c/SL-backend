@@ -1,5 +1,5 @@
 var alexa = require('alexarank');
-
+var metadata = require('web-metadata');
 
 module.exports = {
 
@@ -28,6 +28,32 @@ module.exports = {
             //console.log('ransqsqsk = ' + req.rank);
         });
     },
+	
+	getDesc: function(req, res){		
+		
+		var link = req.param('link');
+		
+		console.log('getDesc : ' + link);
+		var opts = {
+			url: link
+		};
+		metadata(opts, function(err, data) {	
+			var desc;		
+			if (err === null){
+				console.log(data.title);
+				console.log(err);
+				if (typeof data.meta.description !== "undefined"){
+					console.log(data.meta.description);			
+					desc = data.meta.description;
+				}
+				else {
+					console.log(data.meta.DESCRIPTION);			
+					desc = data.meta.DESCRIPTION;				
+				}
+			}
+			return res.json(200,desc);
+		});
+	}
 
 };
 
