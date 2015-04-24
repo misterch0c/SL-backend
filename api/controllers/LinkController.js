@@ -2,6 +2,7 @@ var alexa = require('alexarank');
 var metadata = require('web-metadata');
 var phantom = require('phantom');
 var webpagePreview = require('webpage-preview');
+var isUp = require('is-up');
 
 module.exports = {
 
@@ -14,26 +15,29 @@ module.exports = {
         //getAlexaRank(params.link, req);
 
         alexa(params.link, function(error, rk) {
+            isUp(params.link, function(err, up) {
 
-            Link.create({
-                title: params.title,
-                link: params.link,
-                description: params.description,
-                lang: params.lang,
-                type: params.type,
-                rank: rk.rank,
-            }).exec(function(e, r) {
-                console.log(r);
+                Link.create({
+                    title: params.title,
+                    link: params.link,
+                    description: params.description,
+                    lang: params.lang,
+                    type: params.type,
+                    rank: rk.rank,
+                    isup: up,
+                }).exec(function(e, r) {
+                    console.log(r);
+                });
+                //console.log(params.link);
+
+                //console.log('ransqsqsk = ' + req.rank);
             });
-            //console.log(params.link);
-
-            //console.log('ransqsqsk = ' + req.rank);
         });
     },
 
 
     test: function(req, res) {
-        webpagePreview.generatePreview('http://www.zenk-security.com/', 'google', '/home/unkn0wn/genpic' + '/public/previews', null, null, function(error, sizePaths) {
+        webpagePreview.generatePreview('http://google.com/', 'google', '/home/unkn0wn/genpic' + '/public/previews', null, null, function(error, sizePaths) {
             if (error) {
                 console.log(error);
             } else {
@@ -64,6 +68,29 @@ module.exports = {
                 }
             }
             return res.json(200, desc);
+        });
+    },
+
+    //do a cronjob that call this
+    daily: function(req, res) {
+        var updated = [];
+        Link.find().exec(function(err, links) {
+            async.each(links, function(link, callback) {
+                alexa(link.link, function(error, rk) {
+
+                    link.rank = rk.rank;
+                    link.isup = 'true';
+                    console.log(link);
+                    link.save(function(err, saved) {
+                        updated.push(saved);
+                        console.log(saved);
+                        callback()
+                    });
+                });
+            }, function(err) {
+                res.json(200, updated);
+            });
+
         });
     }
 

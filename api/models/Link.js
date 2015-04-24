@@ -14,7 +14,8 @@ module.exports = {
   	description:'string',
   	rank:'string',
   	lang:'string',
-  	type: 'string'
+  	type: 'string',
+  	isup: 'boolean'
   }
 };
 
