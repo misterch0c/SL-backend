@@ -3,11 +3,20 @@ var metadata = require('web-metadata');
 var phantom = require('phantom');
 var webpagePreview = require('webpage-preview');
 var isUp = require('is-up');
+var request = require('request');
+var fs = require('fs');
+var parse = require('xml-parser');
+var inspect = require('util').inspect;
 
 module.exports = {
 
     test: function(req, res) {
-
+        // //Get ip address
+        // var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+        // console.log(ip);
+        getAlexa('www.zenk-security.com', function(jayz){
+            console.log(jayz);
+        });
     },
 
     create: function(req, res) {
@@ -36,15 +45,15 @@ module.exports = {
     },
 
 
-    test: function(req, res) {
-        webpagePreview.generatePreview('http://google.com/', 'google', '/home/unkn0wn/genpic' + '/public/previews', null, null, function(error, sizePaths) {
-            if (error) {
-                console.log(error);
-            } else {
-                console.log(sizePaths);
-            }
-        });
-    },
+    // test: function(req, res) {
+    //     webpagePreview.generatePreview('http://google.com/', 'google', '/home/unkn0wn/genpic' + '/public/previews', null, null, function(error, sizePaths) {
+    //         if (error) {
+    //             console.log(error);
+    //         } else {
+    //             console.log(sizePaths);
+    //         }
+    //     });
+    // },
 
     getDesc: function(req, res) {
 
@@ -97,3 +106,20 @@ module.exports = {
 };
 
 //########################## END CONTROLLER ################################
+
+function getAlexa(url, alexaCB) {
+    request('http://data.alexa.com/data?cli=10&url=' + url, function(error, response, body) {
+        if (!error && response.statusCode == 200) {
+            //console.log(body) // Show the HTML for the Google homepage.
+            var obj = parse(body);
+            //console.log(obj);
+            //console.log(JSON.stringify(obj));
+            var ch = obj.root.children[0];
+            var rank = ch.children[1].attributes.RANK;
+            var delta = ch.children[2].attributes.DELTA;
+            var jayz ={rank:rank,delta:delta}
+            alexaCB(jayz);
+        }
+
+    });
+}
