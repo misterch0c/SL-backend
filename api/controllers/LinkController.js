@@ -14,46 +14,50 @@ module.exports = {
         // //Get ip address
         // var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
         // console.log(ip);
-        getAlexa('www.zenk-security.com', function(jayz){
-            console.log(jayz);
+        // getAlexa('www.zenk-security.com', function(jayz) {
+        //     console.log(jayz);
+        // });        
+        // getPreview('https://www.zenk-security.com', 'fgf', function(jayz) {
+        //     console.log(jayz);
+        // });
+        isUp('crack-wifi.com', function(err, res) {
+            console.log(res)
         });
     },
 
     create: function(req, res) {
         var params = req.allParams();
         //getAlexaRank(params.link, req);
+        var rawLink=params.link.replace(/.*?:\/\//g, "");//Strip http,https
+        rawLink=rawLink.replace(/\/$/, ""); // Strip trailing slash
+        console.log('RAAAAAAAAAAA'+rawLink);
+        getPreview(params.link, params.title, function(sizePaths) {
+            console.log('dfefd');
+            getAlexa(params.link, function(jayz) {
 
-        alexa(params.link, function(error, rk) {
-            isUp(params.link, function(err, up) {
+                isUp(rawLink, function(err, up) {
 
-                Link.create({
-                    title: params.title,
-                    link: params.link,
-                    description: params.description,
-                    lang: params.lang,
-                    type: params.type,
-                    rank: rk.rank,
-                    isup: up,
-                }).exec(function(e, r) {
-                    console.log(r);
+                    Link.create({
+                        title: params.title,
+                        link: params.link,
+                        description: params.description,
+                        lang: params.lang,
+                        type: params.type,
+                        rank: jayz.rank,
+                        delta: jayz.delta,
+                        isup: up,
+                    }).exec(function(e, r) {
+                        console.log(r);
+                    });
+                    //console.log(params.link);
+
+                    //console.log('ransqsqsk = ' + req.rank);
                 });
-                //console.log(params.link);
-
-                //console.log('ransqsqsk = ' + req.rank);
             });
         });
     },
 
 
-    // test: function(req, res) {
-    //     webpagePreview.generatePreview('http://google.com/', 'google', '/home/unkn0wn/genpic' + '/public/previews', null, null, function(error, sizePaths) {
-    //         if (error) {
-    //             console.log(error);
-    //         } else {
-    //             console.log(sizePaths);
-    //         }
-    //     });
-    // },
 
     getDesc: function(req, res) {
 
@@ -109,17 +113,43 @@ module.exports = {
 
 function getAlexa(url, alexaCB) {
     request('http://data.alexa.com/data?cli=10&url=' + url, function(error, response, body) {
+
         if (!error && response.statusCode == 200) {
-            //console.log(body) // Show the HTML for the Google homepage.
             var obj = parse(body);
-            //console.log(obj);
-            //console.log(JSON.stringify(obj));
-            var ch = obj.root.children[0];
+            var ch;
+            for (var i =0; i<obj.root.children.length;++i){
+                if(obj.root.children[i].name=='SD'){
+                    ch = obj.root.children[i];
+                }
+            }
+
+            console.log(ch);
             var rank = ch.children[1].attributes.RANK;
             var delta = ch.children[2].attributes.DELTA;
-            var jayz ={rank:rank,delta:delta}
+            var jayz = {
+                rank: rank,
+                delta: delta
+            }
             alexaCB(jayz);
         }
+
+    });
+}
+
+function getPreview(url, title, prevCB) {
+    webpagePreview.generatePreview(url, title, '/home/unkn0wn/angular/yop/SL-backend/assets/prev/', null, {
+        small: {
+            width: 160,
+            height: 120
+        }
+    }, function(error, sizePaths) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log(sizePaths);
+
+        }
+            prevCB(sizePaths);
 
     });
 }

@@ -12,10 +12,12 @@ module.exports = {
   	title:'string',
   	link:'string',
   	description:'string',
-  	rank:'string',
+    rank:'string',
+  	delta:'string',
   	lang:'string',
   	type: 'string',
-  	isup: 'boolean'
+  	isup: 'boolean',
+    preview: 'string'
   }
 };
 
