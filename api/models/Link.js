@@ -9,7 +9,10 @@ module.exports = {
 	schema: true,
   attributes: {
 
-  	title:'string',
+  	title:{
+      type:'string',
+      unique:true,
+    },
   	link:'string',
   	description:'string',
     rank:'string',

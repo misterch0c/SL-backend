@@ -3,6 +3,7 @@ var phantom = require('phantom');
 var request = require('request');
 var fs = require('fs');
 var inspect = require('util').inspect;
+var isUp = require('is-up');
 
 module.exports = {
 
@@ -16,9 +17,37 @@ module.exports = {
         // getPreview('https://www.zenk-security.com', 'fgf', function(jayz) {
         //     console.log(jayz);
         // });
-        var params=req.allParams();
-        base.createBase(params);
+        // var params=req.allParams();
+        // base.createBase(params);
+
+        isUp('at4re.com/f/forum.php', function(err, up) {
+            console.log(up);
+        });
         
+    },
+
+    migrate: function(req,res){
+        var i = 0;
+        fs.readFile('linkbase-debug.json','utf-8',function(err,data){
+            var json = JSON.parse(data);
+            console.log("nn");
+            for (var test in json){
+                console.log("NUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUM");
+                console.log(i++);
+
+
+                var params={
+                    link:json[test].url[0],
+                    title:json[test].name,
+                    lang:shortLang(json[test].lang)
+
+                }
+                console.log(params.lang);
+                base.createBase(params);
+            }
+            res.ok();
+
+        });
     },
 
     create: function(req, res) {
@@ -107,4 +136,20 @@ module.exports = {
 //########################## END CONTROLLER ################################
 
 
+function shortLang(lang){
+    switch(lang){
+        case 'Russian':
+            return 'ru';
+            break;
+        case 'English':
+            return 'us';
+            break;        
+        case 'Vietnamese':
+            return 'vn';
+            break;        
+        case 'French':
+            return 'fr';
+            break;
+    }
 
+}

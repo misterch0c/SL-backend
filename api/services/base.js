@@ -4,6 +4,12 @@ var request = require('request');
 var parse = require('xml-parser');
 var isUp = require('is-up');
 var metadata = require('web-metadata');
+var phantom = require ('phantom');
+var WebPage = require('webpage');
+var screenshot = require('url-to-screenshot');
+var webshot = require('webshot');
+var fs = require('fs');
+
 
 
 module.exports = {
@@ -16,18 +22,30 @@ module.exports = {
         rawLink=rawLink.replace(/\/$/, ""); // Strip trailing slash
         console.log('RAAAAAAAAAAAw'+rawLink);
         console.log(params.title);
-        getPreview(params.link, params.title, function(sizePaths) {
-            console.log('dfefd');
+
+            console.log('-----------------');
+            console.log(params.link);
+
+
+            var renderStream = webshot(params.link);
+            var file = fs.createWriteStream('assets/tt/'+params.title+'.png', {encoding: 'binary'});
+
+            renderStream.on('data', function(data) {
+              file.write(data.toString('binary'), 'binary');
+              console.log("WRITTEEEEEEEEEEEEN");
+            });
+
+
             getAlexa(params.link, function(jayz) {
 
                 isUp(rawLink, function(err, up) {
                     getDescTitle(params.link,function(rez){
-                        console.log("cbbbbbbbbb");
-                        console.log(rez);
+                        //console.log("cbbbbbbbbb");
+                        //console.log(rez);
 
 
                         Link.create({
-                            title: rez.title,
+                            title: params.title,
                             link: params.link,
                             description: rez.description,
                             lang: params.lang,
@@ -36,13 +54,14 @@ module.exports = {
                             delta: jayz.delta,
                             isup: up,
                         }).exec(function(e, r) {
+                            console.log("created this");
                             console.log(r);
                         });
 
                     });
                 });
             });
-        });
+
 
     },
 
@@ -76,27 +95,35 @@ module.exports = {
     },
 };
 
-function getPreview(url, title, prevCB) {
+function getPreview(url, title) {
     //need to generate unique title here otherwise we'll get pwnd 
-    webpagePreview.generatePreview(url, title, '/home/unkn0wn/web/SL-backend/assets/prev/', null, {
-        small: {
-            width: 160,
-            height: 120
-        }
-    }, function(error, sizePaths) {
-        if (error) {
-            console.log(error);
-        } else {
-            console.log(sizePaths);
-            console.log("hey");
+    // webpagePreview.generatePreview('http://google.com', title, '/home/unkn0wn/web/SL-backend/assets/prev/', null, {
+    //     small: {
+    //         width: 160,
+    //         height: 120
+    //     }
+    // }, function(error, sizePaths) {
+    //     if (error) {
+    //         console.log(error);
+    //     } else {
+    //         console.log(sizePaths);
+    //         console.log("hey");
 
-        }
-            prevCB(sizePaths);
+    //     }
+    //         prevCB(sizePaths);
 
-    });
+    // });
+var renderStream = webshot(url);
+var file = fs.createWriteStream('assets/tt/'+title+'.png', {encoding: 'binary'});
+
+renderStream.on('data', function(data) {
+  file.write(data.toString('binary'), 'binary');
+  console.log("WRITTEEEEEEEEEEEEN");
+});
 }
 
 function getAlexa(url, alexaCB) {
+    //alexa might block ip if too much requests
     request('http://data.alexa.com/data?cli=10&url=' + url, function(error, response, body) {
 
         if (!error && response.statusCode == 200) {
@@ -108,9 +135,28 @@ function getAlexa(url, alexaCB) {
                 }
             }
 
+            //console.log(ch.children[1].attributes.RANK);
+           // console.log(ch.children);
+            //console.log(ch.children[2].attributes.DELTA);
+            //var rank = ch.children[1].attributes.RANK;
             console.log(ch);
-            var rank = ch.children[1].attributes.RANK;
-            var delta = ch.children[2].attributes.DELTA;
+            if (typeof ch !== 'undefined'){
+                if (typeof ch.children[2] !== 'undefined'){
+                    
+                    var delta = ch.children[2].attributes.DELTA;
+                }else{
+                    var delta="no";
+                }            
+
+                if (typeof ch.children[1] !== 'undefined'){
+                    
+                    var rank = ch.children[1].attributes.RANK;
+                }else{
+                    var rank="no";
+                }
+                        
+            }
+            
             var jayz = {
                 rank: rank,
                 delta: delta
@@ -133,7 +179,6 @@ function getDescTitle(url,descCB){
         metadata(opts, function(err, data) {
             console.log(data);
             if (err === null) {
-                console.log("TIIIIIIIIIIIII");
                 console.log(data.title);
                 console.log(err);
                 if (typeof data.meta.description !== "undefined") {

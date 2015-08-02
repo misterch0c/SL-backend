@@ -41,9 +41,10 @@
 
 config/local.js
 assets/prev
+assets/tt
 mongo
-
-
+linkbase.json
+linkbase-debug.json
 
 
 ################################################
