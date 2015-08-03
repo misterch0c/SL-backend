@@ -155,7 +155,7 @@ function shortLang(lang){
             break;        
         case 'German':
             return 'de';
-    }
+    
             break;
         case 'Arabic':
             return 'ae';
@@ -208,6 +208,7 @@ function shortLang(lang){
         case 'Vietnamese':
             return 'vn';
             break;
+    }
 
 
 }
