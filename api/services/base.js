@@ -18,9 +18,15 @@ module.exports = {
         console.log(options);
 
         var params = options;
-        var rawLink=params.link.replace(/.*?:\/\//g, "");//Strip http,https
-        rawLink=rawLink.replace(/\/$/, ""); // Strip trailing slash
-        console.log('RAAAAAAAAAAAw'+rawLink);
+        pathArray=params.link.split('/');
+        protocol = pathArray[0];
+        host = pathArray[2];
+        url = protocol + '//' + host;
+        url=url.replace(/.*?:\/\//g, "");//Strip http,https
+        console.log(url);
+        //var rawLink=params.link.replace(/.*?:\/\//g, "");//Strip http,https
+        //rawLink=rawLink.replace(/\/$/, ""); // Strip trailing slash
+       //console.log('RAAAAAAAAAAAw'+rawLink);
         console.log(params.title);
 
             console.log('-----------------');
@@ -38,7 +44,9 @@ module.exports = {
 
             getAlexa(params.link, function(jayz) {
 
-                isUp(rawLink, function(err, up) {
+
+                
+                isUp(url, function(err, up) {
                     getDescTitle(params.link,function(rez){
                         //console.log("cbbbbbbbbb");
                         //console.log(rez);

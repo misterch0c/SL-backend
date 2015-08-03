@@ -28,7 +28,7 @@ module.exports = {
 
     migrate: function(req,res){
         var i = 0;
-        fs.readFile('linkbase-debug.json','utf-8',function(err,data){
+        fs.readFile('linkbase.json','utf-8',function(err,data){
             var json = JSON.parse(data);
             console.log("nn");
             for (var test in json){
@@ -36,10 +36,13 @@ module.exports = {
                 console.log(i++);
 
 
+
+
                 var params={
                     link:json[test].url[0],
                     title:json[test].name,
-                    lang:shortLang(json[test].lang)
+                    lang:shortLang(json[test].lang),
+                    type:"board"
 
                 }
                 console.log(params.lang);
@@ -149,7 +152,62 @@ function shortLang(lang){
             break;        
         case 'French':
             return 'fr';
-            break;
+            break;        
+        case 'German':
+            return 'de';
     }
+            break;
+        case 'Arabic':
+            return 'ae';
+            break;
+        case 'Azerbaijan':
+            return 'az';
+            break;
+        case 'Bosnian':
+            return 'ba';
+            break;
+        case 'Chinese':
+            return 'ca';
+            break;
+        case 'Indonesia':
+            return 'id';
+            break;
+
+        case 'Italian':
+            return 'it';
+            break;
+
+        case 'Persian':
+            return 'ir';
+            break;
+
+        case 'Polish':
+            return 'pl';
+            break;
+
+        case 'Portuguese':
+            return 'pt';
+            break;
+
+        case 'Romanian':
+            return 'ro';
+            break;
+
+        case 'Spanish':
+            return 'es';
+            break;
+
+        case 'Thai':
+            return 'th';
+            break;
+
+        case 'Turkish':
+            return 'tr';
+            break;
+
+        case 'Vietnamese':
+            return 'vn';
+            break;
+
 
 }
