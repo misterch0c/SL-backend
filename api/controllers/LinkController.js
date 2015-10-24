@@ -4,54 +4,46 @@ var request = require('request');
 var fs = require('fs');
 var inspect = require('util').inspect;
 var isUp = require('is-up');
+var webshot = require('webshot');
+var metadata = require('web-metadata');
+
 
 module.exports = {
 
     test: function(req, res) {
-        // //Get ip address
-        // var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-        // console.log(ip);
-        // getAlexa('www.zenk-security.com', function(jayz) {
-        //     console.log(jayz);
-        // });        
-        // getPreview('https://www.zenk-security.com', 'fgf', function(jayz) {
-        //     console.log(jayz);
-        // });
-        // var params=req.allParams();
-        // base.createBase(params);
+        var renderStream = webshot("http://google.com");
+        var file = fs.createWriteStream('assets/tt/'+"heyy"+'.png', {encoding: 'binary'});
 
-        isUp('at4re.com/f/forum.php', function(err, up) {
-            console.log(up);
+        renderStream.on('data', function(data) {
+          file.write(data.toString('binary'), 'binary');
+          console.log("WRITTEEEEEEEEEEEEN");
         });
-        
+
+
+
     },
 
-    migrate: function(req,res){
-        var i = 0;
-        fs.readFile('linkbase.json','utf-8',function(err,data){
-            var json = JSON.parse(data);
-            console.log("nn");
-            for (var test in json){
-                console.log("NUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUM");
-                console.log(i++);
-
-
-
-
-                var params={
-                    link:json[test].url[0],
-                    title:json[test].name,
-                    lang:shortLang(json[test].lang),
-                    type:"board"
-
-                }
-                console.log(params.lang);
-                base.createBase(params);
-            }
-            res.ok();
-
-        });
-    },
+    // migrate: function(req,res){
+    //     var i = 0;
+    //     fs.readFile('link-base.json','utf-8',function(err,data){
+    //         var json = JSON.parse(data);
+    //         console.log("nn");
+    //         for (var test in json){
+    //             console.log("NUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUM");
+    //             console.log(i++);
+    //             var params={
+    //                 link:json[test].url[0],
+    //                 title:json[test].name,
+    //                 lang:shortLang(json[test].lang),
+    //                 type:"board"
+    //             }
+    //             console.log(params.lang);
+    //             base.createBase(params);
+    //         }
+    //         res.ok();
+    //
+    //     });
+    // },
 
     create: function(req, res) {
         var params = req.allParams();
@@ -85,7 +77,7 @@ module.exports = {
             }
             return res.json(200, desc);
         });
-    },    
+    },
 
     getTitle: function(req, res) {
 
@@ -139,23 +131,22 @@ module.exports = {
 //########################## END CONTROLLER ################################
 
 
-function shortLang(lang){
+function shortLang(lang){ //yeah that's stupid
     switch(lang){
         case 'Russian':
             return 'ru';
             break;
         case 'English':
             return 'us';
-            break;        
+            break;
         case 'Vietnamese':
             return 'vn';
-            break;        
+            break;
         case 'French':
             return 'fr';
-            break;        
+            break;
         case 'German':
             return 'de';
-    
             break;
         case 'Arabic':
             return 'ae';
@@ -172,19 +163,15 @@ function shortLang(lang){
         case 'Indonesia':
             return 'id';
             break;
-
         case 'Italian':
             return 'it';
             break;
-
         case 'Persian':
             return 'ir';
             break;
-
         case 'Polish':
             return 'pl';
             break;
-
         case 'Portuguese':
             return 'pt';
             break;
@@ -203,10 +190,6 @@ function shortLang(lang){
 
         case 'Turkish':
             return 'tr';
-            break;
-
-        case 'Vietnamese':
-            return 'vn';
             break;
     }
 
