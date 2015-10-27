@@ -40,8 +40,7 @@
 ################################################
 
 config/local.js
-assets/prev
-assets/screenshots
+assets
 mongo
 linkbase.json
 linkbase-debug.json
