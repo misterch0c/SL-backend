@@ -55,7 +55,7 @@ module.exports = {
                     Link.create({
                         title: params.title,
                         link: params.link,
-                        description: rez.description,
+                        description: params.description,
                         lang: params.lang,
                         type: params.type,
                         rank: jayz.rank,
