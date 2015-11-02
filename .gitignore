@@ -44,6 +44,7 @@ assets
 mongo
 linkbase.json
 linkbase-debug.json
+data
 
 
 ################################################
