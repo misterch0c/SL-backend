@@ -10,41 +10,6 @@ var metadata = require('web-metadata');
 
 module.exports = {
 
-    test: function(req, res) {
-        var renderStream = webshot("http://google.com");
-        var file = fs.createWriteStream('assets/tt/'+"heyy"+'.png', {encoding: 'binary'});
-
-        renderStream.on('data', function(data) {
-          file.write(data.toString('binary'), 'binary');
-          console.log("WRITTEEEEEEEEEEEEN");
-        });
-
-
-
-    },
-
-    // migrate: function(req,res){
-    //     var i = 0;
-    //     fs.readFile('link-base.json','utf-8',function(err,data){
-    //         var json = JSON.parse(data);
-    //         console.log("nn");
-    //         for (var test in json){
-    //             console.log("NUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUM");
-    //             console.log(i++);
-    //             var params={
-    //                 link:json[test].url[0],
-    //                 title:json[test].name,
-    //                 lang:shortLang(json[test].lang),
-    //                 type:"board"
-    //             }
-    //             console.log(params.lang);
-    //             base.createBase(params);
-    //         }
-    //         res.ok();
-    //
-    //     });
-    // },
-
     create: function(req, res) {
         var params = req.allParams();
 
@@ -125,6 +90,27 @@ module.exports = {
 
         });
     }
+    //to dump link-base.json into db
+    // migrate: function(req,res){
+    //     var i = 0;
+    //     fs.readFile('link-base.json','utf-8',function(err,data){
+    //         var json = JSON.parse(data);
+    //         console.log("nn");
+    //         for (var test in json){
+    //             console.log(i++);
+    //             var params={
+    //                 link:json[test].url[0],
+    //                 title:json[test].name,
+    //                 lang:shortLang(json[test].lang),
+    //                 type:"board"
+    //             }
+    //             console.log(params.lang);
+    //             base.createBase(params);
+    //         }
+    //         res.ok();
+    //
+    //     });
+    // },
 
 };
 

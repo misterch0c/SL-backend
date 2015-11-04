@@ -21,8 +21,17 @@ module.exports.http = {
   *                                                                           *
   ****************************************************************************/
 
-  // middleware: {
+   middleware: {
 
+  // strictTransportSecurity: require('lusca').hsts({ maxAge: 31536000 }),
+
+  // xframe: require('lusca').xframe('SAMEORIGIN'),
+  // // ...
+  // order: [
+  //   // ...
+  //   'xframe'
+  //   // ...
+  // ]
   /***************************************************************************
   *                                                                          *
   * The order in which middleware should be run for HTTP request. (the Sails *
@@ -71,7 +80,7 @@ module.exports.http = {
 
     // bodyParser: require('skipper')
 
-  // },
+   },
 
   /***************************************************************************
   *                                                                          *
