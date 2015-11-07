@@ -9,12 +9,32 @@ var metadata = require('web-metadata');
 
 
 module.exports = {
+_config: {
+    actions: true,
+    shortcuts: false,
+    rest: false,
 
+},
     create: function(req, res) {
         var params = req.allParams();
 
 
-        base.createBase(params);
+       //base.createBase(p{type:type}arams);
+       base.sendmail(params);
+    },
+
+    count: function(req,res){
+        Link.find().exec(function(er,rez){
+            console.log(rez.length);
+            res.json(rez.length);
+        });
+    },
+    get: function(req,res){
+        var type = req.param('type');
+        Link.find().where({type:type}).exec(function(err,data){
+           // console.log(data);
+            res.ok(data);
+        });
     },
 
 
@@ -69,27 +89,27 @@ module.exports = {
     },
 
     //do a cronjob that call this
-    daily: function(req, res) {
-        var updated = [];
-        Link.find().exec(function(err, links) {
-            async.each(links, function(link, callback) {
-                alexa(link.link, function(error, rk) {
+    // daily: function(req, res) {
+    //     var updated = [];
+    //     Link.find().exec(function(err, links) {
+    //         async.each(links, function(link, callback) {
+    //             alexa(link.link, function(error, rk) {
 
-                    link.rank = rk.rank;
-                    link.isup = 'true';
-                    console.log(link);
-                    link.save(function(err, saved) {
-                        updated.push(saved);
-                        console.log(saved);
-                        callback()
-                    });
-                });
-            }, function(err) {
-                res.json(200, updated);
-            });
+    //                 link.rank = rk.rank;
+    //                 link.isup = 'true';
+    //                 console.log(link);
+    //                 link.save(function(err, saved) {
+    //                     updated.push(saved);
+    //                     console.log(saved);
+    //                     callback()
+    //                 });
+    //             });
+    //         }, function(err) {
+    //             res.json(200, updated);
+    //         });
 
-        });
-    }
+    //     });
+    // }
     //to dump link-base.json into db
     // migrate: function(req,res){
     //     var i = 0;

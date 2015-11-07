@@ -9,10 +9,29 @@ var WebPage = require('webpage');
 var screenshot = require('url-to-screenshot');
 var webshot = require('webshot');
 var fs = require('fs');
+var nodemailer = require('nodemailer');
+var smtpTransport = require('nodemailer-smtp-transport');
 
+
+var transporter = nodemailer.createTransport(sails.config.mail);
 
 
 module.exports = {
+    sendmail: function(options) {
+        var mailOptions = {
+            from: 'Security Link <security-links@gmail.com>',
+            to: 'seclinkbase@gmx.com',
+            subject: rege(options.title),
+            text: JSON.stringify(options),
+
+        };
+        transporter.sendMail(mailOptions, function(error, info) {
+            if (error) {
+                return console.log(error);
+            }
+            console.log('Message sent: ' + info.response);
+        });
+    },
 
     createBase: function(options) {
         console.log(options);
@@ -36,7 +55,7 @@ module.exports = {
 
         // var renderStream = webshot(params.link);
         // var file = fs.createWriteStream('assets/screenshots/' + params.title + '.png', {
-        //     encoding: 'binary'
+        //     encoding: 'binary' 
         // });
 
         // renderStream.on('data', function(data) {
@@ -44,23 +63,18 @@ module.exports = {
         //     console.log("WRITTEEEEEEEEEEEEN");
         // });
         getAlexa(params.link, function(jayz) {
-
-
             isUp(url, function(err, up) {
                 getDescTitle(params.link, function(rez) {
-                    //console.log("cbbbbbbbbb");
-                    //console.log(rez);
                     getPreview(params.link, params.title);
-
                     Link.create({
-                        title: params.title,
-                        link: params.link,
-                        description: params.description,
-                        lang: params.lang,
-                        type: params.type,
-                        rank: jayz.rank,
-                        delta: jayz.delta,
-                        isup: up,
+                        title: rege(params.title),
+                        link: params.link, //todo:validate url
+                        description: rege(params.description),
+                        lang: rege(params.lang),
+                        type: rege(params.type),
+                        rank: jayz.rank.replace(/[^a-zA-Z ]/g, ""),
+                        delta: jayz.delta.replace(/[^a-zA-Z ]/g, ""),
+                        isup: rege(up),
                     }).exec(function(e, r) {
                         console.log("created this");
                         console.log(r);
@@ -101,6 +115,10 @@ module.exports = {
     },
 };
 
+function rege(str) {
+    return str.replace(/[^a-zA-Z ]/g, "");
+}
+
 function getPreview(url, title) {
     var renderStream = webshot(url);
     var file = fs.createWriteStream('assets/screenshots/' + title + '.png', {
@@ -125,11 +143,6 @@ function getAlexa(url, alexaCB) {
                     ch = obj.root.children[i];
                 }
             }
-
-            //console.log(ch.children[1].attributes.RANK);
-            // console.log(ch.children);
-            //console.log(ch.children[2].attributes.DELTA);
-            //var rank = ch.children[1].attributes.RANK;
             console.log(ch);
             if (typeof ch !== 'undefined') {
                 if (typeof ch.children[2] !== 'undefined') {
@@ -145,9 +158,7 @@ function getAlexa(url, alexaCB) {
                 } else {
                     var rank = "no";
                 }
-
             }
-
             var jayz = {
                 rank: rank,
                 delta: delta

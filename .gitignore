@@ -40,6 +40,7 @@
 ################################################
 
 config/local.js
+config/mail.js
 assets
 mongo
 linkbase.json
