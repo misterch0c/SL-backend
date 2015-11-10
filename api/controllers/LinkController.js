@@ -12,7 +12,7 @@ module.exports = {
 _config: {
     actions: true,
     shortcuts: false,
-    rest: false,
+    rest: true,
 
 },
     create: function(req, res) {
@@ -37,6 +37,7 @@ _config: {
         });
     },
 
+    
 
 
     getDesc: function(req, res) {

@@ -18,6 +18,7 @@ var transporter = nodemailer.createTransport(sails.config.mail);
 
 module.exports = {
     sendmail: function(options) {
+        console.log("sending");
         var mailOptions = {
             from: 'Security Link <security-links@gmail.com>',
             to: 'seclinkbase@gmx.com',
