@@ -41,7 +41,7 @@
 
 config/local.js
 config/mail.js
-config/connection.js
+config/connections.js
 assets
 mongo
 linkbase.json

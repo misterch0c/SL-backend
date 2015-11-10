@@ -42,9 +42,9 @@ module.exports.connections = {
     adapter: 'sails-mongo',
     host: 'localhost',
     port: 27017,
-     // user: 'zerosails',
-     // password: 'fosterlezerosailsppl',
-     //database: 'sails'
+    user: zerozail,
+    password=WkZdlJDOZldZZLpKD==
+    database: 'sails'
   },
 
 
