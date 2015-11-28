@@ -7,20 +7,20 @@ var isUp = require('is-up');
 var webshot = require('webshot');
 var metadata = require('web-metadata');
 
-
 module.exports = {
 _config: {
     actions: true,
-    shortcuts: false,
+    shortcuts: true,
     rest: true,
 
 },
+
     create: function(req, res) {
         var params = req.allParams();
 
 
-       //base.createBase(p{type:type}arams);
-       base.sendmail(params);
+       base.createBase(params);
+     //  base.sendmail(params);
     },
 
     count: function(req,res){
@@ -37,7 +37,7 @@ _config: {
         });
     },
 
-    
+
 
 
     getDesc: function(req, res) {

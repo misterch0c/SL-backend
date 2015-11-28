@@ -56,7 +56,7 @@ module.exports = {
 
         // var renderStream = webshot(params.link);
         // var file = fs.createWriteStream('assets/screenshots/' + params.title + '.png', {
-        //     encoding: 'binary' 
+        //     encoding: 'binary'
         // });
 
         // renderStream.on('data', function(data) {
@@ -68,14 +68,14 @@ module.exports = {
                 getDescTitle(params.link, function(rez) {
                     getPreview(params.link, params.title);
                     Link.create({
-                        title: rege(params.title),
+                        title: params.title,
                         link: params.link, //todo:validate url
-                        description: rege(params.description),
+                        description: params.description,
                         lang: rege(params.lang),
                         type: rege(params.type),
-                        rank: jayz.rank.replace(/[^a-zA-Z ]/g, ""),
-                        delta: jayz.delta.replace(/[^a-zA-Z ]/g, ""),
-                        isup: rege(up),
+                        rank: jayz.rank,
+                        delta: jayz.delta,
+                        isup: up,
                     }).exec(function(e, r) {
                         console.log("created this");
                         console.log(r);
@@ -117,7 +117,14 @@ module.exports = {
 };
 
 function rege(str) {
-    return str.replace(/[^a-zA-Z ]/g, "");
+    console.log('reg');
+    if (typeof str === 'undefined'){
+      return "";
+    }
+    else{
+      return str.replace(/[^a-zA-Z ]/g, "");
+
+    }
 }
 
 function getPreview(url, title) {

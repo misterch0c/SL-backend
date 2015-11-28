@@ -20,6 +20,8 @@
 
 // Ensure we're in the project directory, so relative paths work as expected
 // no matter where we actually lift from.
+var prerender = require('prerender-node');
+
 process.chdir(__dirname);
 
 // Ensure a "sails" can be located:
@@ -52,6 +54,7 @@ process.chdir(__dirname);
       rc = function () { return {}; };
     }
   }
+  prerender.set('prerenderServiceUrl', 'http://localhost:3000'));
 
 
   // Start server
